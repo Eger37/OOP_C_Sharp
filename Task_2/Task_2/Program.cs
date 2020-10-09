@@ -9,6 +9,9 @@ namespace Task_2
             Console.WriteLine("Hello!");
             Console.WriteLine("Hello!");
             Console.WriteLine("Hello!");
+            Console.WriteLine("Hello!");
+
+            //ssss
         }
     }
 }
