@@ -17,19 +17,6 @@ namespace Task_4
 {
     class Money
     {
-        private ulong hrivna;
-        public ulong Hrivna
-        {
-            get
-            {
-                return hrivna;
-            }
-            private set
-            {
-                hrivna = value;
-            }
-        }
-
         private ulong kopeyka;
         public ulong Kopeyka
         {
@@ -45,23 +32,21 @@ namespace Task_4
 
         public Money()
         {
-            hrivna = 0;
             kopeyka = 0;
         }
-        public Money(ulong bill)
+        public Money(ulong coins)
         {
-            hrivna = bill;
-            kopeyka = 0;
+            kopeyka = coins;
         }
         public Money(ulong bill, ulong coins)
         {
-            hrivna = bill;
-            kopeyka = coins;
+            kopeyka = (bill * 100) + coins;
         }
 
-
-
-        public void InputMoney()
+    }
+    class Program
+    {
+        public static void InputMoney()
         {
             int selection;
 
@@ -86,27 +71,82 @@ namespace Task_4
                     Console.WriteLine(ex.Message);
                 }
             }
-
+            string TextMoney1;
+            string TextMoney2;
 
             switch (selection)
             {
                 case 1:
                     {
                         Console.WriteLine("Ввод из файла");
-                        string PathToFile = @"Money.txt";
+                        Console.WriteLine("Введите данные в файл в формате \"гривны.копейки, гривны.копейки\"");
+                        string PathToFile = "C:/Users/Admin/Desktop/Money.txt";
+
+                        //string text = "kuku";
+                        //try
+                        //{
+                        //    bool AdditionalRecording = false;
+                        //    using (StreamWriter sw = new StreamWriter(PathToFile, AdditionalRecording, System.Text.Encoding.Unicode))
+                        //    {
+                        //        sw.WriteLine(text);
+                        //    }
+                        //}
+                        //catch (Exception e)
+                        //{
+                        //    Console.WriteLine(e.Message);
+                        //}
+
+                        while (true)
+                        {
+                            if (!File.Exists(PathToFile))
+                            {
+                                Console.WriteLine("Файл не найден, создайте файл Money.txt на рабочем столе!");
+                                Console.WriteLine("Нажмите \"Enter\", если изменили файл");
+                                Console.ReadLine();
+                                continue;
+                            }
+                            else
+                            {
+                                string TextFromFile = File.ReadAllText(PathToFile);
+                                if (TextFromFile == "")
+                                {
+                                    Console.WriteLine($"Файл {Path.GetFileName(PathToFile)} пустой, введите в него данные!");
+                                    Console.WriteLine("Нажмите \"Enter\", если изменили файл");
+                                    Console.ReadLine();
+                                    continue;
+                                }
+                                try
+                                {
+                                    string[] TextFromFileArray = TextFromFile.Split(' ');
+                                    TextMoney1 = TextFromFileArray[0];
+                                    TextMoney2 = TextFromFileArray[1];
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"Вы не правильно ввели данные: {ex.Message}");
+                                }
+
+                                break;
+                            }
+
+                        }
+                        Console.WriteLine("Файл принят");
+
                     }
                     break;
 
                 case 2:
                     {
                         Console.WriteLine("Ввод из консоли");
+                        Console.WriteLine("Введите данные в файл в формате \"гривны.копейки, гривны.копейки\"");
+                        Console.Write("Ввод: ");
+                        string TextFromConsole = Console.ReadLine();
+
                     }
                     break;
             }
         }
-    }
-    class Program
-    {
+
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
