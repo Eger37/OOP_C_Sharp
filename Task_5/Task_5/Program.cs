@@ -4,12 +4,10 @@ using System.Linq.Expressions;
 
 namespace Task_5
 {
-    class Program
+    class Arrays
     {
-        static void Main(string[] args)
+        public static void Start()
         {
-            Console.OutputEncoding = System.Text.Encoding.Unicode;
-
             string path_x = @"C:/Users/Admin/Desktop/x.txt";
             string path_y = @"C:/Users/Admin/Desktop/y.txt";
             string path_z = @"C:/Users/Admin/Desktop/z.txt";
@@ -17,35 +15,35 @@ namespace Task_5
             {
                 string[] x_arr = File.ReadAllText(path_x).Split(",");
                 string[] y_arr = File.ReadAllText(path_y).Split(",");
-                int[] myIntsX = Array.ConvertAll(x_arr, int.Parse);
-                int[] myIntsY = Array.ConvertAll(y_arr, int.Parse);
+                float[] myX = Array.ConvertAll(x_arr, float.Parse);
+                float[] myY = Array.ConvertAll(y_arr, float.Parse);
                 int lenghtArr;
-                if (myIntsX.Length > myIntsY.Length)
+                if (myX.Length > myY.Length)
                 {
-                    lenghtArr = myIntsY.Length;
+                    lenghtArr = myY.Length;
                 }
                 else
                 {
-                    lenghtArr = myIntsX.Length;
+                    lenghtArr = myX.Length;
                 }
                 float[] myIntsZ = new float[lenghtArr];
 
                 for (int i = 0; i < lenghtArr; i++)
                 {
-                    int xi = myIntsX[i];
-                    int yi = myIntsY[i];
+                    float xi = myX[i];
+                    float yi = myY[i];
                     //Console.WriteLine(myInts[i]);
                     if ((xi % 7) == 0)
                     {
                         xi += 8;
-                        myIntsX[i] = xi;
+                        myX[i] = xi;
                     }
                     float zi = (((xi * xi) - (yi * yi)) / 2);
                     myIntsZ[i] = zi;
                 }
                 for (int i = 0; i < lenghtArr; i++)
                 {
-                    Console.WriteLine(myIntsZ[i]);
+                    //Console.WriteLine(myIntsZ[i]);
                 }
 
 
@@ -60,6 +58,30 @@ namespace Task_5
             {
                 Console.WriteLine("вы не правильно ввели данные в файлах");
             }
+
+
+
+
+
+        }
+    }
+    class Program
+    {
+
+        private static double[] OpenFileToArr(string PathToFile)
+        {
+
+            return double[3];
+        }
+        static void Main(string[] args)
+        {
+            Console.InputEncoding = System.Text.Encoding.UTF8;
+            Console.OutputEncoding = System.Text.Encoding.Unicode;
+            string path_x = @"C:/Users/Admin/Desktop/x.txt";
+            string path_y = @"C:/Users/Admin/Desktop/y.txt";
+            string path_z = @"C:/Users/Admin/Desktop/z.txt";
+
+            Arrays.Start();
 
 
 
