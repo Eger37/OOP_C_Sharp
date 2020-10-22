@@ -10,15 +10,15 @@
 
 using System;
 using System.Text;
-using System.Linq;
 using System.IO;
 
 namespace Task_4
 {
     class Money
     {
-        private ulong kopeyka;
-        public ulong Kopeyka
+        private long hrivna;
+        private long kopeyka;
+        public long Kopeyka
         {
             get
             {
@@ -32,16 +32,21 @@ namespace Task_4
 
         public Money()
         {
+            hrivna = 0;
             kopeyka = 0;
         }
-        public Money(ulong coins)
+        public Money(long coins)
         {
+            hrivna = 0;
             kopeyka = coins;
         }
-        public Money(ulong bill, ulong coins)
+        public Money(long bill, long coins)
         {
-            kopeyka = (bill * 100) + coins;
+            hrivna = bill;
+            kopeyka = coins;
+            //kopeyka = (bill * 100) + coins;
         }
+
 
 
 
@@ -139,10 +144,38 @@ namespace Task_4
                 string[] arr2 = TextMoney2.Split('.');
                 try
                 {
-                    ulong a1 = Convert.ToUInt64(arr1[0]);
-                    ulong a2 = Convert.ToUInt64(arr1[1]);
-                    ulong b1 = Convert.ToUInt64(arr2[0]);
-                    ulong b2 = Convert.ToUInt64(arr2[1]);
+                    long a1 = Convert.ToInt64(arr1[0]);
+                    long a2 = Convert.ToInt64(arr1[1]);
+                    long b1 = Convert.ToInt64(arr2[0]);
+                    long b2 = Convert.ToInt64(arr2[1]);
+                    if (a2 > 99 | a2 < -99)
+                    {
+                        while (true)
+                        {
+                            if (a2 < 99 & a2 > -99) { break; }
+                            a2 = a2 / 10;
+
+                        }
+
+                    }
+                    if (b2 > 99 | b2 < -99)
+                    {
+                        while (true)
+                        {
+                            if (b2 < 99 & b2 > -99) { break; }
+                            b2 = b2 / 10;
+                        }
+
+                    }
+                    if (a1 < 0)
+                    {
+                        a2 *= -1;
+                    }
+                    if (b1 < 0)
+                    {
+                        b2 *= -1;
+                    }
+                    Console.WriteLine($"CASH1    Гривнен: {a1}, копеек: {a2};");
                     Money cash1 = new Money(a1, a2);
                     Money cash2 = new Money(b1, b2);
                     Money[] outputMoneyArr = new Money[2];
@@ -158,6 +191,7 @@ namespace Task_4
                 }
             }
         }
+
         public void OutputMoney()
         {
             while (true)
@@ -193,7 +227,7 @@ namespace Task_4
                             Console.WriteLine("Вывод: C:/Users/Admin/Desktop/MoneyOut.txt");
                             string PathToFile = "C:/Users/Admin/Desktop/MoneyOut.txt";
 
-                            string OutText = "";
+                            string OutText = $"Гривнен: {hrivna}, копеек: {kopeyka};";
                             try
                             {
                                 bool AdditionalRecording = false;
@@ -212,17 +246,50 @@ namespace Task_4
 
                     case 2:
                         {
-                            string OutText = "";
+                            string OutText = $"Гривнен: {hrivna}, копеек: {kopeyka};";
                             Console.WriteLine($"Вывод в консоль: {OutText}");
                         }
                         break;
+
                 }
+                break;
 
             }
         }
+
         public static Money SumMoney(Money a, Money b)
         {
-            return 
+            a.ToCoin();
+            b.ToCoin();
+            long ab = a.kopeyka + b.kopeyka;
+            Money c = new Money(ab);
+            a.ToBillAndCoin();
+            b.ToBillAndCoin();
+            c.ToBillAndCoin();
+            return c;
+        }
+
+        public static Money DifferenceMoney(Money a, Money b)
+        {
+            a.ToCoin();
+            b.ToCoin();
+            long ab = a.kopeyka - b.kopeyka;
+            Money c = new Money(ab);
+            a.ToBillAndCoin();
+            b.ToBillAndCoin();
+            c.ToBillAndCoin();
+            return c;
+        }
+        public void ToCoin()
+        {
+            kopeyka += hrivna * 100;
+            hrivna = 0;
+        }
+
+        public void ToBillAndCoin()
+        {
+            hrivna = kopeyka / 100;
+            kopeyka = kopeyka % 100;
         }
     }
     class Program
@@ -340,9 +407,17 @@ namespace Task_4
             Money[] MoneyArr = Money.InputMoney();
             Money cash1 = MoneyArr[0];
             Money cash2 = MoneyArr[1];
-
-            Console.WriteLine(cash1.Kopeyka.ToString());
-            Console.WriteLine(cash2.Kopeyka.ToString());
+            Money cash3 = Money.SumMoney(cash1, cash2);
+            Money cash4 = Money.DifferenceMoney(cash1, cash2);
+            //cash1.ToBillAndCoin();
+            cash1.OutputMoney();
+            cash2.OutputMoney();
+            cash3.OutputMoney();
+            cash4.OutputMoney();
+            cash1.ToCoin();
+            cash1.OutputMoney();
+            cash1.ToBillAndCoin();
+            cash1.OutputMoney();
         }
     }
 }
