@@ -93,6 +93,7 @@ namespace Task_4
                 case 1:
                     {
                         Console.WriteLine("Ввод из файла");
+                        string PathToFile = @"Money.txt";
                     }
                     break;
 
