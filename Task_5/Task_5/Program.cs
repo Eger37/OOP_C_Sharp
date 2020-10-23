@@ -4,84 +4,96 @@ using System.Linq.Expressions;
 
 namespace Task_5
 {
-    class Arrays
-    {
-        public static void Start()
-        {
-            string path_x = @"C:/Users/Admin/Desktop/x.txt";
-            string path_y = @"C:/Users/Admin/Desktop/y.txt";
-            string path_z = @"C:/Users/Admin/Desktop/z.txt";
-            try
-            {
-                string[] x_arr = File.ReadAllText(path_x).Split(",");
-                string[] y_arr = File.ReadAllText(path_y).Split(",");
-                float[] myX = Array.ConvertAll(x_arr, float.Parse);
-                float[] myY = Array.ConvertAll(y_arr, float.Parse);
-                int lenghtArr;
-                if (myX.Length > myY.Length)
-                {
-                    lenghtArr = myY.Length;
-                }
-                else
-                {
-                    lenghtArr = myX.Length;
-                }
-                float[] myIntsZ = new float[lenghtArr];
-
-                for (int i = 0; i < lenghtArr; i++)
-                {
-                    float xi = myX[i];
-                    float yi = myY[i];
-                    //Console.WriteLine(myInts[i]);
-                    if ((xi % 7) == 0)
-                    {
-                        xi += 8;
-                        myX[i] = xi;
-                    }
-                    float zi = (((xi * xi) - (yi * yi)) / 2);
-                    myIntsZ[i] = zi;
-                }
-                for (int i = 0; i < lenghtArr; i++)
-                {
-                    //Console.WriteLine(myIntsZ[i]);
-                }
-
-
-                bool AdditionalRecording = false;
-                using (StreamWriter sw = new StreamWriter(path_z, AdditionalRecording, System.Text.Encoding.Unicode))
-                {
-                    sw.WriteLine(string.Join(", ", myIntsZ));
-                }
-
-            }
-            catch
-            {
-                Console.WriteLine("вы не правильно ввели данные в файлах");
-            }
-
-
-
-
-
-        }
-    }
     class Program
     {
 
         private static double[] OpenFileToArr(string PathToFile)
         {
+            while (true)
+            {
+                try
+                {
+                    string[] arr = File.ReadAllText(PathToFile).Split(",");
+                    double[] DoubleArr = Array.ConvertAll(arr, double.Parse);
+                    return DoubleArr;
+                }
+                catch
+                {
+                    Console.WriteLine("вы не правильно ввели данные в файлах");
+                }
+            }
+        }
+        private static double[] ChangingArrX(double[] input_arr)
+        {
+            for (int i = 0; i < input_arr.Length; i++)
+            {
+                double xi = input_arr[i];
+                if ((xi % 7) == 0)
+                {
+                    xi += 8;
+                    input_arr[i] = xi;
+                }
+            }
+            return input_arr;
+        }
+        private static double[] CreateArrZ(double[] input_arr_x, double[] input_arr_y)
+        {
+            int lenghtArr;
+            if (input_arr_x.Length > input_arr_y.Length)
+            {
+                lenghtArr = input_arr_y.Length;
+            }
+            else
+            {
+                lenghtArr = input_arr_x.Length;
+            }
+            double[] ArrZ = new double[lenghtArr];
 
-            return double[3];
+            for (int i = 0; i < lenghtArr; i++)
+            {
+
+                double xi = input_arr_x[i];
+                double yi = input_arr_y[i];
+                //Console.WriteLine(myInts[i]);
+                if ((xi % 7) == 0)
+                {
+                    xi += 8;
+                    input_arr_x[i] = xi;
+                }
+                double zi = (((xi * xi) - (yi * yi)) / 2);
+                ArrZ[i] = zi;
+            }
+            return ArrZ;
+        }
+        private static void WriteArrToFile(double[] input_arr, string path_to_file = @"C:/Users/Admin/Desktop/z.txt")
+        {
+            try
+            {
+                bool AdditionalRecording = false;
+                using (StreamWriter sw = new StreamWriter(path_to_file, AdditionalRecording, System.Text.Encoding.Unicode))
+                {
+                    sw.WriteLine(string.Join(", ", input_arr));
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
         static void Main(string[] args)
         {
-            Console.InputEncoding = System.Text.Encoding.UTF8;
-            Console.OutputEncoding = System.Text.Encoding.Unicode;
+            //Console.InputEncoding = System.Text.Encoding.Unicode;
+            //Console.OutputEncoding = System.Text.Encoding.Unicode;
             string path_x = @"C:/Users/Admin/Desktop/x.txt";
             string path_y = @"C:/Users/Admin/Desktop/y.txt";
             string path_z = @"C:/Users/Admin/Desktop/z.txt";
 
-            Arrays.Start();
+            double[] arr_x = OpenFileToArr(path_x);
+            arr_x = ChangingArrX(arr_x);
+            double[] arr_y = OpenFileToArr(path_y);
+            double[] arr_z = CreateArrZ(arr_x, arr_y);
+            WriteArrToFile(arr_z, path_z);
+
 
 
 
