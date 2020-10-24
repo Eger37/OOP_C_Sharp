@@ -37,12 +37,14 @@ namespace Task_5
                         //    double[] arrFromLineDouble = Array.ConvertAll(arrFromLine, double.Parse);
                         //    Console.WriteLine(string.Join(":", arrFromLineDouble));
                         //}
-                        Console.WriteLine(string.Join(":", lineArr));
+                        int last = lineArr.Length - 1;
+                        lineArr = lineArr[0..last];
+                        //Console.WriteLine(string.Join(":", lineArr));
 
-                        Console.WriteLine("do suda rabotaet");
+                        //Console.WriteLine("do suda rabotaet");
                         double[] DoubleArr = Array.ConvertAll(lineArr, double.Parse);
 
-                        Console.WriteLine(string.Join(" ", DoubleArr));
+                        //Console.WriteLine(string.Join(" ", DoubleArr));
 
                         return DoubleArr;
                     }
