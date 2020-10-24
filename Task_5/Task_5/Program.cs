@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 
 namespace Task_5
 {
@@ -13,13 +16,42 @@ namespace Task_5
             {
                 try
                 {
-                    string[] arr = File.ReadAllText(PathToFile).Split(",");
-                    double[] DoubleArr = Array.ConvertAll(arr, double.Parse);
-                    return DoubleArr;
+                    if (!File.Exists(PathToFile))
+                    {
+                        Console.WriteLine($"Файл не найден, создайте файл {PathToFile} - на это рабочем столе!");
+                        Console.WriteLine("Нажмите \"Enter\", если готовы снова считывать файл");
+                        Console.ReadLine();
+                        continue;
+                    }
+                    else
+                    {
+                        string textFromFile = File.ReadAllText(PathToFile);
+                        textFromFile = Regex.Replace(textFromFile, "\r", " ");
+                        textFromFile = Regex.Replace(textFromFile, "\n", " ");
+                        textFromFile = Regex.Replace(textFromFile, " {2,}", " ");
+                        //Console.WriteLine(textFromFile);
+                        //string[] lineArr = textFromFile.Split(Environment.NewLine, ' ');
+                        string[] lineArr = textFromFile.Split(new char[] { ' ' });
+                        //foreach( string line in lineArr) {
+                        //    string[] arrFromLine = line.Split(' ');
+                        //    double[] arrFromLineDouble = Array.ConvertAll(arrFromLine, double.Parse);
+                        //    Console.WriteLine(string.Join(":", arrFromLineDouble));
+                        //}
+                        Console.WriteLine(string.Join(":", lineArr));
+
+                        Console.WriteLine("do suda rabotaet");
+                        double[] DoubleArr = Array.ConvertAll(lineArr, double.Parse);
+
+                        Console.WriteLine(string.Join(" ", DoubleArr));
+
+                        return DoubleArr;
+                    }
+
                 }
-                catch
+                catch (Exception ex)
                 {
                     Console.WriteLine("вы не правильно ввели данные в файлах");
+                    Console.WriteLine(ex.Message);
                 }
             }
         }
@@ -72,7 +104,7 @@ namespace Task_5
                 bool AdditionalRecording = false;
                 using (StreamWriter sw = new StreamWriter(path_to_file, AdditionalRecording, System.Text.Encoding.Unicode))
                 {
-                    sw.WriteLine(string.Join(", ", input_arr));
+                    sw.WriteLine(string.Join(" ", input_arr));
                 }
             }
             catch (Exception e)

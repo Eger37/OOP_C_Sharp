@@ -175,7 +175,7 @@ namespace Task_4
                     {
                         b2 *= -1;
                     }
-                    Console.WriteLine($"CASH1    Гривнен: {a1}, копеек: {a2};");
+                    //Console.WriteLine($"CASH1    Гривнен: {a1}, копеек: {a2};");
                     Money cash1 = new Money(a1, a2);
                     Money cash2 = new Money(b1, b2);
                     Money[] outputMoneyArr = new Money[2];
