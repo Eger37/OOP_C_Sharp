@@ -115,7 +115,11 @@ namespace Task_4
             while (true)
             {
                 int selection;
-                Console.WriteLine("Выберите тип ввода:\n1 - Ввод из файла;\n2 - Ввод из консоли.");
+
+                Console.WriteLine("Запишите координаты в файл в формате \"x,y x,y x,y x,y\"");
+                Console.WriteLine("Если вводите все четыре координаты, то в правильной очерёдности.");
+                Console.WriteLine("Ввод трёх точек не поддерживается");
+                Console.WriteLine("\nВыберите тип ввода координат:\n1 - Ввод из файла;\n2 - Ввод из консоли.");
                 //choose
                 while (true)
                 {
@@ -143,9 +147,6 @@ namespace Task_4
                     case 1:
                         {
                             Console.WriteLine("Ввод из файла");
-                            Console.WriteLine("Запишите координаты в файл в формате \"x,y x,y x,y x,y\"");
-                            Console.WriteLine("Если вводите все четыре координаты, то в правильной очерёдности.");
-                            Console.WriteLine("Ввод трёх координат не поддерживается");
 
                             //Console.WriteLine("Можете ввести 1, 2, 3 или все четыре координаты, но в правильной очерёдности");
                             string PathToFile = "C:/Users/Admin/Desktop/Coordinates.txt";
@@ -233,9 +234,6 @@ namespace Task_4
                     case 2:
                         {
                             Console.WriteLine("Ввод из консоли");
-                            Console.WriteLine("Запишите координаты в файл в формате \"x,y x,y x,y x,y\"");
-                            Console.WriteLine("Если вводите все четыре координаты, то в правильной очерёдности.");
-                            Console.WriteLine("Ввод трёх координат не поддерживается");
                             Console.Write("Ввод: ");
                             string TextFromConsole = Console.ReadLine();
                             try
@@ -303,7 +301,7 @@ namespace Task_4
             while (true)
             {
                 int selection;
-                Console.WriteLine("Выберите тип вывода:\n1 - Вывод в файл;\n2 - Вывод в консоль.");
+                Console.WriteLine("\nВыберите тип вывода координат\n1 - Вывод в файл;\n2 - Вывод в консоль.");
                 while (true)
                 {
                     try
@@ -363,6 +361,7 @@ namespace Task_4
             }
         }
 
+
         public (double, double) SidesOfARectangle()
         {
             int x1 = coordinate1[0];
@@ -379,6 +378,7 @@ namespace Task_4
             return tuple;
 
         }
+
         public void AreaOfARectangle()
         {
             //(double, double) tuple = this.SidesOfARectangle();
@@ -398,6 +398,7 @@ namespace Task_4
             double result = side1 * side2;
             Console.WriteLine($"Area of the rectangle: {result}");
         }
+
         public void PerimeterOfARectangle()
         {
             var (side1, side2) = this.SidesOfARectangle();
@@ -405,6 +406,29 @@ namespace Task_4
             Console.WriteLine($"Perimeter of the rectangle: {result}");
         }
 
+        public void MinRadiusOfARectangle()
+        {
+            var (side1, side2) = this.SidesOfARectangle();
+            double result;
+            if (side1 > side2)
+            {
+                result = side2;
+
+            }
+            else
+            {
+                result = side1;
+            }
+            Console.WriteLine($"Radius of a circle inscribed in a rectangle: {result}");
+        }
+
+        public void MaxRadiusOfARectangle()
+        {
+            var (side1, side2) = this.SidesOfARectangle();
+            double result;
+            result = (Math.Sqrt((side1 * side1) + (side2 * side2)) / 2);
+            Console.WriteLine($"Radius of a circle circumscribed in a rectangle: { result}");
+        }
     }
     class Program
     {
@@ -419,6 +443,8 @@ namespace Task_4
             rectangle1.OutputCoordinates();
             rectangle1.AreaOfARectangle();
             rectangle1.PerimeterOfARectangle();
+            rectangle1.MinRadiusOfARectangle();
+            rectangle1.MaxRadiusOfARectangle();
 
             //rectangle1.Coordinate1[0] = 9;
             //Console.WriteLine(rectangle1.Coordinate1[0]);
