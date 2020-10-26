@@ -108,6 +108,388 @@ namespace Task_4
 
         }
 
+        public static Rectangles InputCoordinates()
+        {
+
+            while (true)
+            {
+                int selection;
+                string TextCoordinates = "";
+                Console.WriteLine("Выберите тип ввода:\n1 - Ввод из файла;\n2 - Ввод из консоли.");
+                //choose
+                while (true)
+                {
+                    try
+                    {
+                        Console.Write("Вы ввели: ");
+                        selection = Convert.ToInt32(Console.ReadLine());
+                        if (selection == 1 || selection == 2)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Такого варианта нет!");
+                        }
+                    }
+                    catch (FormatException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+
+                switch (selection)
+                {
+                    case 1:
+                        {
+                            Console.WriteLine("Ввод из файла");
+                            Console.WriteLine("Запишите координаты в файл в формате \"x,y x,y x,y x,y\"");
+                            Console.WriteLine("Если вводите все четыре координаты, то в правильной очерёдности.");
+                            Console.WriteLine("Ввод трёх координат не поддерживается");
+
+                            //Console.WriteLine("Можете ввести 1, 2, 3 или все четыре координаты, но в правильной очерёдности");
+                            string PathToFile = "C:/Users/Admin/Desktop/Coordinates.txt";
+
+                            while (true)
+                            {
+                                if (!File.Exists(PathToFile))
+                                {
+                                    Console.WriteLine("Файл не найден, создайте файл Coordinates.txt на рабочем столе!");
+                                    Console.WriteLine("Нажмите \"Enter\", если изменили файл");
+                                    Console.ReadLine();
+                                    continue;
+                                }
+                                else
+                                {
+                                    string TextFromFile = File.ReadAllText(PathToFile);
+                                    if (TextFromFile == "")
+                                    {
+                                        Console.WriteLine($"Файл {Path.GetFileName(PathToFile)} пустой, введите в него данные!");
+                                        Console.WriteLine("Нажмите \"Enter\", если изменили файл");
+                                        Console.ReadLine();
+                                        continue;
+                                    }
+                                    try
+                                    {
+                                        string[] TextFromFileArray = TextFromFile.Split(" ");
+                                        if (TextFromFileArray.Length == 1)
+                                        {
+                                            string c = TextFromFileArray[0];
+                                            string[] stringDots = c.Split(",");
+                                            int[] intDots = Array.ConvertAll(stringDots, int.Parse);
+
+                                            return new Rectangles(intDots);
+                                        }
+                                        if (TextFromFileArray.Length == 2)
+                                        {
+                                            string a = TextFromFileArray[0];
+                                            string[] stringDotsA = a.Split(",");
+                                            int[] intDotsA = Array.ConvertAll(stringDotsA, int.Parse);
+                                            string c = TextFromFileArray[1];
+                                            string[] stringDotsC = c.Split(",");
+                                            int[] intDotsC = Array.ConvertAll(stringDotsC, int.Parse);
+
+                                            return new Rectangles(intDotsA, intDotsC);
+                                        }
+                                        if (TextFromFileArray.Length == 3)
+                                        {
+                                            Console.WriteLine($"Ввод трёх координат не поддерживается!");
+                                            Console.WriteLine("Нажмите \"Enter\", если изменили файл");
+                                            Console.ReadLine();
+                                            continue;
+                                        }
+                                        if (TextFromFileArray.Length == 4)
+                                        {
+                                            string a = TextFromFileArray[0];
+                                            string[] stringDotsA = a.Split(",");
+                                            int[] intDotsA = Array.ConvertAll(stringDotsA, int.Parse);
+                                            string b = TextFromFileArray[1];
+                                            string[] stringDotsB = b.Split(",");
+                                            int[] intDotsB = Array.ConvertAll(stringDotsB, int.Parse);
+                                            string c = TextFromFileArray[2];
+                                            string[] stringDotsC = c.Split(",");
+                                            int[] intDotsC = Array.ConvertAll(stringDotsC, int.Parse);
+                                            string d = TextFromFileArray[3];
+                                            string[] stringDotsD = d.Split(",");
+                                            int[] intDotsD = Array.ConvertAll(stringDotsD, int.Parse);
+
+                                            return new Rectangles(intDotsA, intDotsB, intDotsC, intDotsD);
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine($"Вы не правильно ввели данные: {ex.Message}");
+                                    }
+
+                                    break;
+                                }
+
+                            }
+                            Console.WriteLine("Файл принят");
+
+                        }
+                        break;
+
+                    case 2:
+                        {
+                            Console.WriteLine("Ввод из консоли");
+                            Console.WriteLine("Запишите координаты в файл в формате \"x,y x,y x,y x,y\"");
+                            Console.WriteLine("Если вводите все четыре координаты, то в правильной очерёдности.");
+                            Console.WriteLine("Ввод трёх координат не поддерживается");
+                            Console.Write("Ввод: ");
+                            string TextFromConsole = Console.ReadLine();
+                            try
+                            {
+                                string[] TextFromConsoleArray = TextFromConsole.Split(" ");
+
+                                if (TextFromConsoleArray.Length == 1)
+                                {
+                                    string c = TextFromConsoleArray[0];
+                                    string[] stringDots = c.Split(",");
+                                    int[] intDots = Array.ConvertAll(stringDots, int.Parse);
+
+                                    return new Rectangles(intDots);
+                                }
+                                if (TextFromConsoleArray.Length == 2)
+                                {
+                                    string a = TextFromConsoleArray[0];
+                                    string[] stringDotsA = a.Split(",");
+                                    int[] intDotsA = Array.ConvertAll(stringDotsA, int.Parse);
+                                    string c = TextFromConsoleArray[1];
+                                    string[] stringDotsC = c.Split(",");
+                                    int[] intDotsC = Array.ConvertAll(stringDotsC, int.Parse);
+
+                                    return new Rectangles(intDotsA, intDotsC);
+                                }
+                                if (TextFromConsoleArray.Length == 3)
+                                {
+                                    Console.WriteLine($"Ввод трёх координат не поддерживается!");
+                                    Console.WriteLine("Нажмите \"Enter\", если изменили файл");
+                                    Console.ReadLine();
+                                    continue;
+                                }
+                                if (TextFromConsoleArray.Length == 4)
+                                {
+                                    string a = TextFromConsoleArray[0];
+                                    string[] stringDotsA = a.Split(",");
+                                    int[] intDotsA = Array.ConvertAll(stringDotsA, int.Parse);
+                                    string b = TextFromConsoleArray[1];
+                                    string[] stringDotsB = b.Split(",");
+                                    int[] intDotsB = Array.ConvertAll(stringDotsB, int.Parse);
+                                    string c = TextFromConsoleArray[2];
+                                    string[] stringDotsC = c.Split(",");
+                                    int[] intDotsC = Array.ConvertAll(stringDotsC, int.Parse);
+                                    string d = TextFromConsoleArray[3];
+                                    string[] stringDotsD = d.Split(",");
+                                    int[] intDotsD = Array.ConvertAll(stringDotsD, int.Parse);
+
+                                    return new Rectangles(intDotsA, intDotsB, intDotsC, intDotsD);
+                                }
+
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Вы не правильно ввели данные: {ex.Message}");
+                            }
+                        }
+                        break;
+                }
+
+                //string[] arr1 = TextMoney1.Split('.');
+                //string[] arr2 = TextMoney2.Split('.');
+                //try
+                //{
+                //    long a1 = Convert.ToInt64(arr1[0]);
+                //    long a2 = Convert.ToInt64(arr1[1]);
+                //    long b1 = Convert.ToInt64(arr2[0]);
+                //    long b2 = Convert.ToInt64(arr2[1]);
+                //    if (a2 > 99 | a2 < -99)
+                //    {
+                //        while (true)
+                //        {
+                //            if (a2 < 99 & a2 > -99) { break; }
+                //            a2 = a2 / 10;
+
+                //        }
+
+                //    }
+                //    if (b2 > 99 | b2 < -99)
+                //    {
+                //        while (true)
+                //        {
+                //            if (b2 < 99 & b2 > -99) { break; }
+                //            b2 = b2 / 10;
+                //        }
+
+                //    }
+                //    if (a1 < 0)
+                //    {
+                //        a2 *= -1;
+                //    }
+                //    if (b1 < 0)
+                //    {
+                //        b2 *= -1;
+                //    }
+                //    Console.WriteLine($"CASH1    Гривнен: {a1}, копеек: {a2};");
+                //    Money cash1 = new Money(a1, a2);
+                //    Money cash2 = new Money(b1, b2);
+                //    Money[] outputMoneyArr = new Money[2];
+                //    outputMoneyArr[0] = cash1;
+                //    outputMoneyArr[1] = cash2;
+
+                //    return outputMoneyArr;
+                //}
+                //catch
+                //{
+                //    Console.WriteLine("Данные введены некорректно");
+                //    continue;
+                //}
+            }
+
+        }
+
+
+        //public static Money[] InputMoney()
+        //{
+        //    while (true)
+        //    {
+        //        int selection;
+        //        string TextMoney1 = "";
+        //        string TextMoney2 = "";
+        //        Console.WriteLine("Выберите тип ввода:\n1 - Ввод из файла;\n2 - Ввод из консоли.");
+        //        while (true)
+        //        {
+        //            try
+        //            {
+        //                Console.Write("Вы ввели: ");
+        //                selection = Convert.ToInt32(Console.ReadLine());
+        //                if (selection == 1 || selection == 2)
+        //                {
+        //                    break;
+        //                }
+        //                else
+        //                {
+        //                    Console.WriteLine("Такого варианта нет!");
+        //                }
+        //            }
+        //            catch (FormatException ex)
+        //            {
+        //                Console.WriteLine(ex.Message);
+        //            }
+        //        }
+
+        //        switch (selection)
+        //        {
+        //            case 1:
+        //                {
+        //                    Console.WriteLine("Ввод из файла");
+        //                    Console.WriteLine("Введите данные в файл в формате \"гривны.копейки, гривны.копейки\"");
+        //                    string PathToFile = "C:/Users/Admin/Desktop/Money.txt";
+
+        //                    while (true)
+        //                    {
+        //                        if (!File.Exists(PathToFile))
+        //                        {
+        //                            Console.WriteLine("Файл не найден, создайте файл Money.txt на рабочем столе!");
+        //                            Console.WriteLine("Нажмите \"Enter\", если изменили файл");
+        //                            Console.ReadLine();
+        //                            continue;
+        //                        }
+        //                        else
+        //                        {
+        //                            string TextFromFile = File.ReadAllText(PathToFile);
+        //                            if (TextFromFile == "")
+        //                            {
+        //                                Console.WriteLine($"Файл {Path.GetFileName(PathToFile)} пустой, введите в него данные!");
+        //                                Console.WriteLine("Нажмите \"Enter\", если изменили файл");
+        //                                Console.ReadLine();
+        //                                continue;
+        //                            }
+        //                            try
+        //                            {
+        //                                string[] TextFromFileArray = TextFromFile.Split(", ");
+        //                                TextMoney1 = TextFromFileArray[0];
+        //                                TextMoney2 = TextFromFileArray[1];
+        //                            }
+        //                            catch (Exception ex)
+        //                            {
+        //                                Console.WriteLine($"Вы не правильно ввели данные: {ex.Message}");
+        //                            }
+
+        //                            break;
+        //                        }
+
+        //                    }
+        //                    Console.WriteLine("Файл принят");
+
+        //                }
+        //                break;
+
+        //            case 2:
+        //                {
+        //                    Console.WriteLine("Ввод из консоли");
+        //                    Console.WriteLine("Введите данные в файл в формате \"гривны.копейки, гривны.копейки\"");
+        //                    Console.Write("Ввод: ");
+        //                    string TextFromConsole = Console.ReadLine();
+        //                    string[] TextFromConsoleArray = TextFromConsole.Split(", ");
+        //                    TextMoney1 = TextFromConsoleArray[0];
+        //                    TextMoney2 = TextFromConsoleArray[1];
+        //                }
+        //                break;
+        //        }
+
+        //        string[] arr1 = TextMoney1.Split('.');
+        //        string[] arr2 = TextMoney2.Split('.');
+        //        try
+        //        {
+        //            long a1 = Convert.ToInt64(arr1[0]);
+        //            long a2 = Convert.ToInt64(arr1[1]);
+        //            long b1 = Convert.ToInt64(arr2[0]);
+        //            long b2 = Convert.ToInt64(arr2[1]);
+        //            if (a2 > 99 | a2 < -99)
+        //            {
+        //                while (true)
+        //                {
+        //                    if (a2 < 99 & a2 > -99) { break; }
+        //                    a2 = a2 / 10;
+
+        //                }
+
+        //            }
+        //            if (b2 > 99 | b2 < -99)
+        //            {
+        //                while (true)
+        //                {
+        //                    if (b2 < 99 & b2 > -99) { break; }
+        //                    b2 = b2 / 10;
+        //                }
+
+        //            }
+        //            if (a1 < 0)
+        //            {
+        //                a2 *= -1;
+        //            }
+        //            if (b1 < 0)
+        //            {
+        //                b2 *= -1;
+        //            }
+        //            Console.WriteLine($"CASH1    Гривнен: {a1}, копеек: {a2};");
+        //            Money cash1 = new Money(a1, a2);
+        //            Money cash2 = new Money(b1, b2);
+        //            Money[] outputMoneyArr = new Money[2];
+        //            outputMoneyArr[0] = cash1;
+        //            outputMoneyArr[1] = cash2;
+
+        //            return outputMoneyArr;
+        //        }
+        //        catch
+        //        {
+        //            Console.WriteLine("Данные введены некорректно");
+        //            continue;
+        //        }
+        //    }
+        //}
+
 
 
 
@@ -363,7 +745,8 @@ namespace Task_4
             Console.OutputEncoding = Encoding.UTF8;
             Console.InputEncoding = Encoding.UTF8;
 
-            Rectangles rectangle1 = new Rectangles(new int[] { 3, 4 }, new int[] { 10, 15 }, new int[] { 4, 2 }, new int[] { 4, 2 });
+            //Rectangles rectangle1 = new Rectangles(new int[] { 3, 4 }, new int[] { 10, 15 }, new int[] { 4, 2 }, new int[] { 4, 2 });
+            Rectangles rectangle1 = Rectangles.InputCoordinates();
             Console.WriteLine(rectangle1.Coordinate1[0]);
             Console.WriteLine(rectangle1.Coordinate1[1]);
             Console.WriteLine(rectangle1.Coordinate2[0]);
@@ -372,6 +755,8 @@ namespace Task_4
             Console.WriteLine(rectangle1.Coordinate3[1]);
             Console.WriteLine(rectangle1.Coordinate4[0]);
             Console.WriteLine(rectangle1.Coordinate4[1]);
+
+
 
             ////InputMoney();
             //Money[] MoneyArr = Money.InputMoney();
