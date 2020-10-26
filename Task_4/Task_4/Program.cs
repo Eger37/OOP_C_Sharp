@@ -297,6 +297,72 @@ namespace Task_4
 
         }
 
+        public void OutputCoordinates()
+        {
+            while (true)
+            {
+                int selection;
+                Console.WriteLine("Выберите тип вывода:\n1 - Вывод в файл;\n2 - Вывод в консоль.");
+                while (true)
+                {
+                    try
+                    {
+                        Console.Write("Вы ввели: ");
+                        selection = Convert.ToInt32(Console.ReadLine());
+                        if (selection == 1 || selection == 2)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Такого варианта нет!");
+                        }
+                    }
+                    catch (FormatException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+
+                switch (selection)
+                {
+                    case 1:
+                        {
+                            Console.WriteLine("Вывод в файл");
+                            Console.WriteLine("Вывод: C:/Users/Admin/Desktop/RectanglesOut.txt");
+                            string PathToFile = "C:/Users/Admin/Desktop/RectanglesOut.txt";
+
+                            string OutText = $"Точки: A({coordinate1[0]},{coordinate1[1]}), B({coordinate2[0]},{coordinate2[1]}), C({coordinate3[0]},{coordinate3[1]}),D({coordinate4[0]},{coordinate4[1]});";
+                            try
+                            {
+                                bool AdditionalRecording = false;
+                                using (StreamWriter sw = new StreamWriter(PathToFile, AdditionalRecording, System.Text.Encoding.Unicode))
+                                {
+                                    sw.WriteLine(OutText);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+
+                        }
+                        break;
+
+                    case 2:
+                        {
+                            string OutText = $"Точки: A({coordinate1[0]},{coordinate1[1]}), B({coordinate2[0]},{coordinate2[1]}), C({coordinate3[0]},{coordinate3[1]}),D({coordinate4[0]},{coordinate4[1]});";
+                            Console.WriteLine($"Вывод в консоль: {OutText}");
+                        }
+                        break;
+
+                }
+                break;
+
+            }
+        }
+
+
     }
     class Program
     {
@@ -308,16 +374,19 @@ namespace Task_4
 
             //Rectangles rectangle1 = new Rectangles(new int[] { 3, 4 }, new int[] { 10, 15 }, new int[] { 4, 2 }, new int[] { 4, 2 });
             Rectangles rectangle1 = Rectangles.InputCoordinates();
+            rectangle1.OutputCoordinates();
 
-            Console.WriteLine(rectangle1.Coordinate1[0]);
-            Console.WriteLine(rectangle1.Coordinate1[1]);
-            Console.WriteLine(rectangle1.Coordinate2[0]);
-            Console.WriteLine(rectangle1.Coordinate2[1]);
-            Console.WriteLine(rectangle1.Coordinate3[0]);
-            Console.WriteLine(rectangle1.Coordinate3[1]);
-            Console.WriteLine(rectangle1.Coordinate4[0]);
-            Console.WriteLine(rectangle1.Coordinate4[1]);
+            //rectangle1.Coordinate1[0] = 9;
+            //Console.WriteLine(rectangle1.Coordinate1[0]);
+            //Console.WriteLine(rectangle1.Coordinate1[1]);
+            //Console.WriteLine(rectangle1.Coordinate2[0]);
+            //Console.WriteLine(rectangle1.Coordinate2[1]);
+            //Console.WriteLine(rectangle1.Coordinate3[0]);
+            //Console.WriteLine(rectangle1.Coordinate3[1]);
+            //Console.WriteLine(rectangle1.Coordinate4[0]);
+            //Console.WriteLine(rectangle1.Coordinate4[1]);
 
+            rectangle1.OutputCoordinates();
 
 
             ////InputMoney();
