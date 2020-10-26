@@ -3,6 +3,7 @@
 //a) вводити координати прямокутника з клавіатури (файлу);
 //b) виводити координати прямокутника на екран (файл);
 //c) знаходити площу / периметр прямокутника;
+
 //d) радіусів вписаної та описаної окружностей.
 //Створити приклад для демонстрації усіх функціональних
 //можливостей.
@@ -362,6 +363,47 @@ namespace Task_4
             }
         }
 
+        public (double, double) SidesOfARectangle()
+        {
+            int x1 = coordinate1[0];
+            int x2 = coordinate2[0];
+            int x3 = coordinate3[0];
+            //int x4 = coordinate4[0];
+            int y1 = coordinate1[1];
+            int y2 = coordinate2[1];
+            int y3 = coordinate3[1];
+            //int y4 = coordinate4[1];
+            double side1 = Math.Sqrt(Math.Pow((x2 - x1), 2) + Math.Pow((y2 - y1), 2));
+            double side2 = Math.Sqrt(Math.Pow((x3 - x2), 2) + Math.Pow((y3 - y2), 2));
+            var tuple = (side1, side2);
+            return tuple;
+
+        }
+        public void AreaOfARectangle()
+        {
+            //(double, double) tuple = this.SidesOfARectangle();
+            var (side1, side2) = this.SidesOfARectangle();
+            //double side1 = tuple[0];
+
+            //int x1 = coordinate1[0];
+            //int x2 = coordinate2[0];
+            //int x3 = coordinate3[0];
+            ////int x4 = coordinate4[0];
+            //int y1 = coordinate1[1];
+            //int y2 = coordinate2[1];
+            //int y3 = coordinate3[1];
+            ////int y4 = coordinate4[1];
+            //double side1 = Math.Sqrt(Math.Pow((x2 - x1), 2) + Math.Pow((y2 - y1), 2));
+            //double side2 = Math.Sqrt(Math.Pow((x3 - x2), 2) + Math.Pow((y3 - y2), 2));
+            double result = side1 * side2;
+            Console.WriteLine($"Area of the rectangle: {result}");
+        }
+        public void PerimeterOfARectangle()
+        {
+            var (side1, side2) = this.SidesOfARectangle();
+            double result = side1 * 2 + side2 * 2;
+            Console.WriteLine($"Perimeter of the rectangle: {result}");
+        }
 
     }
     class Program
@@ -375,6 +417,8 @@ namespace Task_4
             //Rectangles rectangle1 = new Rectangles(new int[] { 3, 4 }, new int[] { 10, 15 }, new int[] { 4, 2 }, new int[] { 4, 2 });
             Rectangles rectangle1 = Rectangles.InputCoordinates();
             rectangle1.OutputCoordinates();
+            rectangle1.AreaOfARectangle();
+            rectangle1.PerimeterOfARectangle();
 
             //rectangle1.Coordinate1[0] = 9;
             //Console.WriteLine(rectangle1.Coordinate1[0]);
