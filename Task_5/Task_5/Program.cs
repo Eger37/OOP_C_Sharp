@@ -54,6 +54,9 @@ namespace Task_5
                 {
                     Console.WriteLine("вы не правильно ввели данные в файлах");
                     Console.WriteLine(ex.Message);
+                    Console.WriteLine("Нажмите \"Enter\", если готовы снова считывать файл");
+                    Console.ReadLine();
+                    continue;
                 }
             }
         }
