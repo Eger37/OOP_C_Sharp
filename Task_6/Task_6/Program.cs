@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Task_6
 {
@@ -32,6 +33,7 @@ namespace Task_6
             }
 
         }
+
         public static int InputKeyForSearch()
         {
             while (true)
@@ -52,6 +54,7 @@ namespace Task_6
             }
 
         }
+
         public static int[,] GenerateRandomArray(int[] DimensionIntArr)
         {
             int a = DimensionIntArr[0];
@@ -74,6 +77,7 @@ namespace Task_6
             }
             return RandomArray;
         }
+
         public static void PrintTwoDimensionalArray(int[,] RandomArray)
         {
             int a = RandomArray.GetLength(0);
@@ -95,6 +99,58 @@ namespace Task_6
             return;
         }
 
+        public static void SearchForTwoDimensionalArray(int[,] TwoDimensionalArray, int key)
+        {
+            int a = TwoDimensionalArray.GetLength(0);
+            int b = TwoDimensionalArray.GetLength(1);
+            bool tr = true;
+            for (int i = 0; i < a; i++)
+            {
+                for (int j = 0; j < b; j++)
+                {
+                    if (TwoDimensionalArray[i, j] == key)
+                    {
+                        Console.WriteLine($"Ключ найден на позиции: [{i},{j}]");
+                        tr = false;
+                    }
+
+                }
+
+            }
+
+            if (tr)
+            {
+                Console.WriteLine("Ключ не найден");
+            }
+
+        }
+
+        public static void PrintSpecialTask(int[,] TwoDimensionalArray)
+        {
+            int a = TwoDimensionalArray.GetLength(0);
+            int b = TwoDimensionalArray.GetLength(1);
+
+            for (int i = 0; i < b; i++)
+            {
+                int min = 41;
+                int max = 0;
+                for (int j = 0; j < a; j++)
+                {
+                    if (TwoDimensionalArray[j, i] < min)
+                    {
+                        min = TwoDimensionalArray[j, i];
+                    }
+                    if (TwoDimensionalArray[j, i] > max)
+                    {
+                        max = TwoDimensionalArray[j, i];
+                    }
+
+                }
+                int sum = min + max;
+                Console.WriteLine($"Сумма максимального та минимального значения в {i + 1} столбце: {sum}");
+
+            }
+        }
     }
     class Program
     {
@@ -106,8 +162,10 @@ namespace Task_6
             int[,] RandomArr = WorkWithArray.GenerateRandomArray(DimensionArr);
             WorkWithArray.PrintTwoDimensionalArray(RandomArr);
             int key = WorkWithArray.InputKeyForSearch();
+            WorkWithArray.SearchForTwoDimensionalArray(RandomArr, key);
+            WorkWithArray.PrintSpecialTask(RandomArr);
 
-            Console.WriteLine($"\na: {DimensionArr[0]}, b: {DimensionArr[1]}");
+            //Console.WriteLine($"\na: {DimensionArr[0]}, b: {DimensionArr[1]}");
 
 
 
