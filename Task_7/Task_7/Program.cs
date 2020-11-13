@@ -53,6 +53,7 @@ namespace Task_7
             AverageTemperatureAtNight = tn;
             AverageAtmosphericPressure = ap;
             Precipitation = pr;
+            TypeOfWeatherAtDay = TypeOfWeather.не_определено;
         }
         public WeatherParametersDay(float td, float tn, float ap, int pr, TypeOfWeather tow) // constuctor
         {
@@ -126,11 +127,12 @@ namespace Task_7
             arrWeatherDays[idx] = wpd;
         }
 
-        public static void InputDataFromFile()
+        private static WeatherDays InputDataFromFile()
         {
+            WeatherDays arrDaysParams;
             Console.WriteLine("Ввод из файла");
             Console.WriteLine("В первой строчке введите количество дней.");
-            Console.WriteLine("В слудующих строчках вводите параметры погоды в день в формате:");
+            Console.WriteLine("В слудующих строчках вводите параметры погоды дня в формате:");
             Console.WriteLine("f1 f2 f3 i s");
             Console.WriteLine("f1 = Средняя температура днём - float");
             Console.WriteLine("f2 = Средняя температура ночью - float");
@@ -139,11 +141,11 @@ namespace Task_7
             Console.WriteLine("s = Тип погоды в этот день - string (ниже примеры типов погоды, вводить это значение необязательно)");
             Console.WriteLine("Типы погоды: не_определено, дождь, кратковременный_дождь, гроза, снег, туман, хмуро, солнечно\n");
 
-            bool restartRead = false;
             string PathToFile = "D:/OneDrive - ДонНУ/Рабочий стол/Univer/WeatherDays.txt";
             //string PathToFile = "C:/Users/Admin/Desktop/Univer/WeatherDays.txt";
             while (true)
             {
+                bool restartRead = false;
                 if (!File.Exists(PathToFile))
                 {
                     Console.WriteLine($"Файл не найден, создайте файл WeatherDays.txt по пути {PathToFile}");
@@ -152,270 +154,200 @@ namespace Task_7
                     continue;
                 }
                 int numberOfDays;
-                StreamReader fileData = new StreamReader(PathToFile);
-                string firstLine = fileData.ReadLine();
-
-                if (firstLine == null)
+                using (StreamReader fileData = new StreamReader(PathToFile))
                 {
-                    Console.WriteLine($"Файл {Path.GetFileName(PathToFile)} пустой, введите в него данные!");
-                    fileData.Close();
-                    Console.WriteLine("Нажмите \"Enter\", если изменили файл");
-                    Console.ReadLine();
-                    continue;
+                    //StreamReader fileData = new StreamReader(PathToFile);
+                    string firstLine = fileData.ReadLine();
+
+                    if (firstLine == null)
+                    {
+                        Console.WriteLine($"Файл {Path.GetFileName(PathToFile)} пустой, введите в него данные!");
+                        fileData.Close();
+                        Console.WriteLine("Нажмите \"Enter\", если изменили файл");
+                        Console.ReadLine();
+                        continue;
+                    }
+                    try
+                    { numberOfDays = Convert.ToInt32(firstLine); }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Вы не правильно ввели данные: {ex.Message}");
+                        fileData.Close();
+                        Console.WriteLine("Нажмите \"Enter\", если изменили файл");
+                        Console.ReadLine();
+                        continue;
+                    }
+                    arrDaysParams = new WeatherDays(numberOfDays);
+                    int count = 0;
+                    while (count != numberOfDays)
+                    {
+                        string nextLine = fileData.ReadLine();
+                        if (nextLine == null)
+                        {
+                            Console.WriteLine($"В строке {count + 2} пусто");
+                            fileData.Close();
+                            Console.WriteLine("Нажмите \"Enter\", если исправили строку");
+                            Console.ReadLine();
+                            restartRead = true;
+                            break;
+                        }
+                        string[] splitLine = nextLine.Split(" ");
+                        if (splitLine.Length != 4 & splitLine.Length != 5)
+                        {
+                            Console.WriteLine($"В строке {count + 2} данные введены неверно");
+                            fileData.Close();
+                            //Console.WriteLine($"count: {count}, splitLine.Length {splitLine.Length}");
+                            Console.WriteLine("Нажмите \"Enter\", если исправили строку");
+                            Console.ReadLine();
+                            restartRead = true;
+                            break;
+                        }
+                        try
+                        {
+                            float AverageTemperaturePerDay = float.Parse(splitLine[0], System.Globalization.CultureInfo.InvariantCulture);
+                            float AverageTemperatureAtNight = float.Parse(splitLine[1], System.Globalization.CultureInfo.InvariantCulture);
+                            float AverageAtmosphericPressure = float.Parse(splitLine[2], System.Globalization.CultureInfo.InvariantCulture);
+                            int Precipitation = Convert.ToInt32(splitLine[3]);
+                            TypeOfWeather TypeOfWeatherAtDay = TypeOfWeather.не_определено;
+                            if (splitLine.Length == 5)
+                            {
+                                TypeOfWeatherAtDay = (TypeOfWeather)Enum.Parse(typeof(TypeOfWeather), splitLine[4], true);
+                            }
+                            WeatherParametersDay dayParams = new WeatherParametersDay(AverageTemperaturePerDay, AverageTemperatureAtNight, AverageAtmosphericPressure, Precipitation, TypeOfWeatherAtDay);
+                            arrDaysParams.insertDaySettings(count, dayParams);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"В строке {count + 2} данные введены неверно");
+                            Console.WriteLine($"Ошибка: {ex.Message}");
+                            fileData.Close();
+                            Console.WriteLine("Нажмите \"Enter\", если исправили строку");
+                            Console.ReadLine();
+                            restartRead = true;
+                            break;
+                        }
+                        count++;
+                        if (restartRead)
+                        { break; }
+                    }
+                    if (restartRead)
+                    { continue; }
                 }
-                fileData = new StreamReader(PathToFile);
+
+                break;
+
+
+            }
+            Console.WriteLine("\nФайл принят");
+            return arrDaysParams;
+        }
+
+        private static WeatherDays InputDataFromConsole()
+        {
+            WeatherDays arrDaysParams;
+            Console.WriteLine("Ввод из консоли");
+            int numberOfDays;
+            while (true)
+            {
+                Console.WriteLine("Введите количество дней:");
+                string strNumberOfDays = Console.ReadLine();
                 try
-                { numberOfDays = Convert.ToInt32(firstLine); }
+                {
+                    numberOfDays = Convert.ToInt32(strNumberOfDays);
+                    break;
+                }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Вы не правильно ввели данные: {ex.Message}");
-                    fileData.Close();
-                    Console.WriteLine("Нажмите \"Enter\", если изменили файл");
-                    Console.ReadLine();
                     continue;
                 }
-                fileData = new StreamReader(PathToFile);
-                WeatherDays arrDaysParams = new WeatherDays(numberOfDays);
-                int count = 0;
-                while (count != numberOfDays)
+
+            }
+            arrDaysParams = new WeatherDays(numberOfDays);
+
+            Console.WriteLine("В слудующих строчках вводите параметры погоды дня в формате:");
+            Console.WriteLine("f1 f2 f3 i s");
+            Console.WriteLine("f1 = Средняя температура днём - float");
+            Console.WriteLine("f2 = Средняя температура ночью - float");
+            Console.WriteLine("f3 = Средняе атмосферное давление - float (мм ртутного столба");
+            Console.WriteLine("i = Количество осадков - int (мм/день)");
+            Console.WriteLine("s = Тип погоды в этот день - string (ниже примеры типов погоды, вводить это значение необязательно)");
+            Console.WriteLine("Типы погоды: не_определено, дождь, кратковременный_дождь, гроза, снег, туман, хмуро, солнечно\n");
+
+            int count = 0;
+            while (count != numberOfDays)
+            {
+                while (true)
                 {
-                    string nextLine = fileData.ReadLine();
+                    Console.WriteLine($"Вводите параметры {count + 1} дня:");
+                    string nextLine = Console.ReadLine();
                     string[] splitLine = nextLine.Split(" ");
-                    if (splitLine.Length != 4 || splitLine.Length != 5)
+                    if (splitLine.Length != 4 & splitLine.Length != 5)
                     {
-                        Console.WriteLine($"В строке {count + 2} данные введены неверно");
-                        fileData.Close();
-                        Console.WriteLine("Нажмите \"Enter\", если исправили строку");
-                        Console.ReadLine();
-                        restartRead = true;
-                        break;
+                        Console.WriteLine($"Данные введены неверно");
+                        continue;
                     }
                     try
                     {
-                        numberOfDays = Convert.ToInt32(firstLine);
                         float AverageTemperaturePerDay = float.Parse(splitLine[0], System.Globalization.CultureInfo.InvariantCulture);
                         float AverageTemperatureAtNight = float.Parse(splitLine[1], System.Globalization.CultureInfo.InvariantCulture);
                         float AverageAtmosphericPressure = float.Parse(splitLine[2], System.Globalization.CultureInfo.InvariantCulture);
                         int Precipitation = Convert.ToInt32(splitLine[3]);
-                        TypeOfWeather TypeOfWeatherAtDay = 0;
+                        TypeOfWeather TypeOfWeatherAtDay = TypeOfWeather.не_определено;
                         if (splitLine.Length == 5)
                         {
                             TypeOfWeatherAtDay = (TypeOfWeather)Enum.Parse(typeof(TypeOfWeather), splitLine[4], true);
                         }
                         WeatherParametersDay dayParams = new WeatherParametersDay(AverageTemperaturePerDay, AverageTemperatureAtNight, AverageAtmosphericPressure, Precipitation, TypeOfWeatherAtDay);
                         arrDaysParams.insertDaySettings(count, dayParams);
+                        break;
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"В строке {count + 2} данные введены неверно");
+                        Console.WriteLine($"Данные введены неверно");
                         Console.WriteLine($"Ошибка: {ex.Message}");
-                        fileData.Close();
-                        Console.WriteLine("Нажмите \"Enter\", если исправили строку");
-                        Console.ReadLine();
-                        restartRead = true;
-                        break;
+                        continue;
                     }
 
-                    count++;
+
                 }
-                if (restartRead)
-                { continue; }
-                break;
-
-
+                count++;
             }
+
+
+
+
+
             Console.WriteLine("\nФайл принят");
+            return arrDaysParams;
         }
 
         public static WeatherDays InputData()
         {
             bool typeOfInput = ChooseTypeOfInput();
-
-
-            return new WeatherDays(31);
+            WeatherDays arrDays;
+            if (typeOfInput)
+            {
+                arrDays = InputDataFromFile();
+            }
+            else
+            {
+                arrDays = InputDataFromConsole();
+            }
+            return arrDays;
         }
-
-
-
-        //public static Rectangles InputCoordinates()
-        //{
-
-        //    while (true)
-        //    {
-        //        int selection;
-
-        //        Console.WriteLine("Запишите координаты в файл в формате \"x,y x,y x,y x,y\"");
-        //        Console.WriteLine("Если вводите все четыре координаты, то в правильной очерёдности.");
-        //        Console.WriteLine("Ввод трёх точек не поддерживается");
-        //        Console.WriteLine("\nВыберите тип ввода координат:\n1 - Ввод из файла;\n2 - Ввод из консоли.");
-
-        //        switch (selection)
-        //        {
-        //            case 1:
-        //                {
-        //                    Console.WriteLine("Ввод из файла");
-
-        //                    //Console.WriteLine("Можете ввести 1, 2, 3 или все четыре координаты, но в правильной очерёдности");
-        //                    string PathToFile = "C:/Users/Admin/Desktop/Coordinates.txt";
-
-        //                    while (true)
-        //                    {
-        //                        if (!File.Exists(PathToFile))
-        //                        {
-        //                            Console.WriteLine("Файл не найден, создайте файл Coordinates.txt на рабочем столе!");
-        //                            Console.WriteLine("Нажмите \"Enter\", если изменили файл");
-        //                            Console.ReadLine();
-        //                            continue;
-        //                        }
-        //                        else
-        //                        {
-        //                            string TextFromFile = File.ReadAllText(PathToFile);
-        //                            if (TextFromFile == "")
-        //                            {
-        //                                Console.WriteLine($"Файл {Path.GetFileName(PathToFile)} пустой, введите в него данные!");
-        //                                Console.WriteLine("Нажмите \"Enter\", если изменили файл");
-        //                                Console.ReadLine();
-        //                                continue;
-        //                            }
-        //                            try
-        //                            {
-        //                                string[] TextFromFileArray = TextFromFile.Split(" ");
-        //                                if (TextFromFileArray.Length == 1)
-        //                                {
-        //                                    string c = TextFromFileArray[0];
-        //                                    string[] stringDots = c.Split(",");
-        //                                    int[] intDots = Array.ConvertAll(stringDots, int.Parse);
-
-        //                                    return new Rectangles(intDots);
-        //                                }
-        //                                if (TextFromFileArray.Length == 2)
-        //                                {
-        //                                    string a = TextFromFileArray[0];
-        //                                    string[] stringDotsA = a.Split(",");
-        //                                    int[] intDotsA = Array.ConvertAll(stringDotsA, int.Parse);
-        //                                    string c = TextFromFileArray[1];
-        //                                    string[] stringDotsC = c.Split(",");
-        //                                    int[] intDotsC = Array.ConvertAll(stringDotsC, int.Parse);
-
-        //                                    return new Rectangles(intDotsA, intDotsC);
-        //                                }
-        //                                if (TextFromFileArray.Length == 3)
-        //                                {
-        //                                    Console.WriteLine($"Ввод трёх координат не поддерживается!");
-        //                                    Console.WriteLine("Нажмите \"Enter\", если изменили файл");
-        //                                    Console.ReadLine();
-        //                                    continue;
-        //                                }
-        //                                if (TextFromFileArray.Length == 4)
-        //                                {
-        //                                    string a = TextFromFileArray[0];
-        //                                    string[] stringDotsA = a.Split(",");
-        //                                    int[] intDotsA = Array.ConvertAll(stringDotsA, int.Parse);
-        //                                    string b = TextFromFileArray[1];
-        //                                    string[] stringDotsB = b.Split(",");
-        //                                    int[] intDotsB = Array.ConvertAll(stringDotsB, int.Parse);
-        //                                    string c = TextFromFileArray[2];
-        //                                    string[] stringDotsC = c.Split(",");
-        //                                    int[] intDotsC = Array.ConvertAll(stringDotsC, int.Parse);
-        //                                    string d = TextFromFileArray[3];
-        //                                    string[] stringDotsD = d.Split(",");
-        //                                    int[] intDotsD = Array.ConvertAll(stringDotsD, int.Parse);
-
-        //                                    return new Rectangles(intDotsA, intDotsB, intDotsC, intDotsD);
-        //                                }
-        //                            }
-        //                            catch (Exception ex)
-        //                            {
-        //                                Console.WriteLine($"Вы не правильно ввели данные: {ex.Message}");
-        //                            }
-
-        //                            break;
-        //                        }
-
-        //                    }
-        //                    Console.WriteLine("Файл принят");
-
-        //                }
-        //                break;
-
-        //            case 2:
-        //                {
-        //                    Console.WriteLine("Ввод из консоли");
-        //                    Console.Write("Ввод: ");
-        //                    string TextFromConsole = Console.ReadLine();
-        //                    try
-        //                    {
-        //                        string[] TextFromConsoleArray = TextFromConsole.Split(" ");
-
-        //                        if (TextFromConsoleArray.Length == 1)
-        //                        {
-        //                            string c = TextFromConsoleArray[0];
-        //                            string[] stringDots = c.Split(",");
-        //                            int[] intDots = Array.ConvertAll(stringDots, int.Parse);
-
-        //                            return new Rectangles(intDots);
-        //                        }
-        //                        if (TextFromConsoleArray.Length == 2)
-        //                        {
-        //                            string a = TextFromConsoleArray[0];
-        //                            string[] stringDotsA = a.Split(",");
-        //                            int[] intDotsA = Array.ConvertAll(stringDotsA, int.Parse);
-        //                            string c = TextFromConsoleArray[1];
-        //                            string[] stringDotsC = c.Split(",");
-        //                            int[] intDotsC = Array.ConvertAll(stringDotsC, int.Parse);
-
-        //                            return new Rectangles(intDotsA, intDotsC);
-        //                        }
-        //                        if (TextFromConsoleArray.Length == 3)
-        //                        {
-        //                            Console.WriteLine($"Ввод трёх координат не поддерживается!");
-        //                            Console.WriteLine("Нажмите \"Enter\", если изменили файл");
-        //                            Console.ReadLine();
-        //                            continue;
-        //                        }
-        //                        if (TextFromConsoleArray.Length == 4)
-        //                        {
-        //                            string a = TextFromConsoleArray[0];
-        //                            string[] stringDotsA = a.Split(",");
-        //                            int[] intDotsA = Array.ConvertAll(stringDotsA, int.Parse);
-        //                            string b = TextFromConsoleArray[1];
-        //                            string[] stringDotsB = b.Split(",");
-        //                            int[] intDotsB = Array.ConvertAll(stringDotsB, int.Parse);
-        //                            string c = TextFromConsoleArray[2];
-        //                            string[] stringDotsC = c.Split(",");
-        //                            int[] intDotsC = Array.ConvertAll(stringDotsC, int.Parse);
-        //                            string d = TextFromConsoleArray[3];
-        //                            string[] stringDotsD = d.Split(",");
-        //                            int[] intDotsD = Array.ConvertAll(stringDotsD, int.Parse);
-
-        //                            return new Rectangles(intDotsA, intDotsB, intDotsC, intDotsD);
-        //                        }
-
-        //                    }
-        //                    catch (Exception ex)
-        //                    {
-        //                        Console.WriteLine($"Вы не правильно ввели данные: {ex.Message}");
-        //                    }
-        //                }
-        //                break;
-        //        }
-        //    }
-
-        //}
-
 
     }
 
     class Program
     {
-
-
-
         static void Main(string[] args)
         {
-            WeatherDays.InputDataFromFile();
-
-
+            WeatherDays arrDays = WeatherDays.InputData();
+            WeatherParametersDay[] arrParams = arrDays.ArrWeatherDays;
+            WeatherParametersDay secondDay = arrParams[0];
+            Console.WriteLine();
+            secondDay.GetInfo();
 
 
             //WeatherParametersDay mondey = new WeatherParametersDay(12, 6, 133, 0);
