@@ -26,16 +26,33 @@ using System;
 
 namespace Task_7
 {
+    enum TypeOfWeather : byte
+    {
+        не_визначено,
+        дощ,
+        короткочасний_дощ,
+        гроза,
+        сніг,
+        туман,
+        похмуро,
+        сонячно
+    }
     class WeatherParametersDay
     {
-        private float averageTemperaturePerDay;
-        public float AverageTemperaturePerDay
-        {
-            get { return averageTemperaturePerDay; }
-            private set { averageTemperaturePerDay = value; }
-        }
+        public float AverageTemperaturePerDay { get; private set; }
+        public float AverageTemperatureAtNight { get; private set; }
+        public int AverageAtmosphericPressure { get; private set; }
+        public int Precipitation { get; private set; }
+        public TypeOfWeather TypeOfWeatherAtDay { get; private set; }
 
     }
+
+    class WeatherDays
+    {
+        private WeatherParametersDay[] ArrWeatherDays = new WeatherParametersDay[31];
+
+    }
+
     class Program
     {
         enum Days : byte
@@ -57,18 +74,7 @@ namespace Task_7
             Night
         }
 
-        enum TypeOfWeather : byte
-        {
-            не_визначено,
-            дощ,
-            короткочасний_дощ,
-            гроза,
-            сніг,
-            туман,
-            похмуро,
-            сонячно
 
-        }
         static void Main(string[] args)
         {
             Days day = Days.Friday;
