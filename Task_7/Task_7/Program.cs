@@ -75,9 +75,23 @@ namespace Task_7
 
     class WeatherDays
     {
-        public int NumberOfDays { get; private set; } = 31;
-        public WeatherParametersDay[] ArrWeatherDays { get; private set; }
-
+        private WeatherParametersDay[] arrWeatherDays;
+        public WeatherParametersDay[] ArrWeatherDays
+        {
+            get { return arrWeatherDays; }
+            private set
+            {
+                arrWeatherDays = value;
+            }
+        }
+        WeatherDays()
+        {
+            ArrWeatherDays = new WeatherParametersDay[0];
+        }
+        WeatherDays(int daysNumber)
+        {
+            ArrWeatherDays = new WeatherParametersDay[daysNumber];
+        }
         private static bool ChooseTypeOfInput()
         {
             int intSelection;
@@ -107,7 +121,12 @@ namespace Task_7
             }
         }
 
-        private static void InputDataFromFile()
+        private void insertDaySettings(int idx, WeatherParametersDay wpd)
+        {
+            arrWeatherDays[idx] = wpd;
+        }
+
+        public static void InputDataFromFile()
         {
             Console.WriteLine("Ввод из файла");
             Console.WriteLine("В первой строчке введите количество дней.");
@@ -118,7 +137,7 @@ namespace Task_7
             Console.WriteLine("f3 = Средняе атмосферное давление - float (мм ртутного столба");
             Console.WriteLine("i = Количество осадков - int (мм/день)");
             Console.WriteLine("s = Тип погоды в этот день - string (ниже примеры типов погоды, вводить это значение необязательно)");
-            Console.WriteLine("Типы погоды: не_определено,дождь, кратковременный_дождь, гроза, снег, туман, хмуро, солнечно");
+            Console.WriteLine("Типы погоды: не_определено, дождь, кратковременный_дождь, гроза, снег, туман, хмуро, солнечно\n");
 
             bool restartRead = false;
             string PathToFile = "D:/OneDrive - ДонНУ/Рабочий стол/Univer/WeatherDays.txt";
@@ -135,32 +154,37 @@ namespace Task_7
                 int numberOfDays;
                 StreamReader fileData = new StreamReader(PathToFile);
                 string firstLine = fileData.ReadLine();
-                if (firstLine == "")
+
+                if (firstLine == null)
                 {
                     Console.WriteLine($"Файл {Path.GetFileName(PathToFile)} пустой, введите в него данные!");
+                    fileData.Close();
                     Console.WriteLine("Нажмите \"Enter\", если изменили файл");
                     Console.ReadLine();
                     continue;
                 }
+                fileData = new StreamReader(PathToFile);
                 try
-                {
-                    numberOfDays = Convert.ToInt32(firstLine);
-
-                }
+                { numberOfDays = Convert.ToInt32(firstLine); }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Вы не правильно ввели данные: {ex.Message}");
+                    fileData.Close();
+                    Console.WriteLine("Нажмите \"Enter\", если изменили файл");
+                    Console.ReadLine();
                     continue;
                 }
-
-                Console.WriteLine(numberOfDays);
-                while (numberOfDays != 0)
+                fileData = new StreamReader(PathToFile);
+                WeatherDays arrDaysParams = new WeatherDays(numberOfDays);
+                int count = 0;
+                while (count != numberOfDays)
                 {
                     string nextLine = fileData.ReadLine();
                     string[] splitLine = nextLine.Split(" ");
                     if (splitLine.Length != 4 || splitLine.Length != 5)
                     {
-                        Console.WriteLine($"В строке {numberOfDays + 1} данные введены неверно");
+                        Console.WriteLine($"В строке {count + 2} данные введены неверно");
+                        fileData.Close();
                         Console.WriteLine("Нажмите \"Enter\", если исправили строку");
                         Console.ReadLine();
                         restartRead = true;
@@ -176,17 +200,23 @@ namespace Task_7
                         TypeOfWeather TypeOfWeatherAtDay = 0;
                         if (splitLine.Length == 5)
                         {
-                            TypeOfWeatherAtDay = (TypeOfWeather) Enum.Parse(typeof(TypeOfWeather), splitLine[4], true);
+                            TypeOfWeatherAtDay = (TypeOfWeather)Enum.Parse(typeof(TypeOfWeather), splitLine[4], true);
                         }
+                        WeatherParametersDay dayParams = new WeatherParametersDay(AverageTemperaturePerDay, AverageTemperatureAtNight, AverageAtmosphericPressure, Precipitation, TypeOfWeatherAtDay);
+                        arrDaysParams.insertDaySettings(count, dayParams);
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Вы не правильно ввели данные: {ex.Message}");
-                        continue;
+                        Console.WriteLine($"В строке {count + 2} данные введены неверно");
+                        Console.WriteLine($"Ошибка: {ex.Message}");
+                        fileData.Close();
+                        Console.WriteLine("Нажмите \"Enter\", если исправили строку");
+                        Console.ReadLine();
+                        restartRead = true;
+                        break;
                     }
 
-
-                    numberOfDays--;
+                    count++;
                 }
                 if (restartRead)
                 { continue; }
@@ -194,7 +224,7 @@ namespace Task_7
 
 
             }
-            Console.WriteLine("Файл принят");
+            Console.WriteLine("\nФайл принят");
         }
 
         public static WeatherDays InputData()
@@ -202,7 +232,7 @@ namespace Task_7
             bool typeOfInput = ChooseTypeOfInput();
 
 
-            return new WeatherDays();
+            return new WeatherDays(31);
         }
 
 
@@ -383,10 +413,15 @@ namespace Task_7
 
         static void Main(string[] args)
         {
-            WeatherParametersDay mondey = new WeatherParametersDay(12, 6, 133, 0);
-            WeatherParametersDay tuesday = new WeatherParametersDay(13, 7, 125, 3, TypeOfWeather.кратковременный_дождь);
-            mondey.GetInfo();
-            tuesday.GetInfo();
+            WeatherDays.InputDataFromFile();
+
+
+
+
+            //WeatherParametersDay mondey = new WeatherParametersDay(12, 6, 133, 0);
+            //WeatherParametersDay tuesday = new WeatherParametersDay(13, 7, 125, 3, TypeOfWeather.кратковременный_дождь);
+            //mondey.GetInfo();
+            //tuesday.GetInfo();
         }
     }
 }
