@@ -337,6 +337,134 @@ namespace Task_7
             return arrDays;
         }
 
+        public int NumberOfGloomyDays()
+        {
+            int nogd = 0;
+            int count = 0;
+            while (count != ArrWeatherDays.Length)
+            {
+                WeatherParametersDay day = ArrWeatherDays[count];
+                if (day.TypeOfWeatherAtDay == TypeOfWeather.хмуро)
+                {
+                    nogd++;
+                }
+                count++;
+            }
+            return nogd;
+        }
+
+        public void PrintNumberOfGloomyDays()
+        {
+            int nogd = NumberOfGloomyDays();
+            Console.WriteLine($"Количество хмурых дней: {nogd}");
+        }
+        
+        public int NumberOfDaysWithRain()
+        {
+            int nodwr = 0;
+            int count = 0;
+            while (count != ArrWeatherDays.Length)
+            {
+                WeatherParametersDay day = ArrWeatherDays[count];
+                if (day.TypeOfWeatherAtDay == TypeOfWeather.дождь)
+                {
+                    nodwr++;
+                }
+                count++;
+            }
+            return nodwr;
+        }
+
+        public void PrintNumberOfDaysWithRain()
+        {
+            int nodwr = NumberOfDaysWithRain();
+            Console.WriteLine($"Количество дней с дождём: {nodwr}");
+        }
+
+        public int NumberOfThunderstormDay()
+        {
+            int notd = 0;
+            int count = 0;
+            while (count != ArrWeatherDays.Length)
+            {
+                WeatherParametersDay day = ArrWeatherDays[count];
+                if (day.TypeOfWeatherAtDay == TypeOfWeather.гроза)
+                {
+                    notd++;
+                }
+                count++;
+            }
+            return notd;
+        }
+
+        public void PrintNumberOfThunderstormDays()
+        {
+            int notd = NumberOfThunderstormDay();
+            Console.WriteLine($"Количество дней с грозой: {notd}");
+        }
+
+        public void PrintTotalDaysWithRainOrThunderstorm()
+        {
+            int nodwr = NumberOfDaysWithRain();
+            int notd = NumberOfThunderstormDay();
+            Console.WriteLine($"Общее количество дней с грозой или дождём: {nodwr + notd}");
+        }
+
+        public float MinTemperatureAtNights()
+        {
+            int idx=0;
+            int count = 1;
+            while (count != ArrWeatherDays.Length)
+            {
+                WeatherParametersDay day1 = ArrWeatherDays[idx];
+                WeatherParametersDay day2 = ArrWeatherDays[count];
+
+                if (day1.AverageTemperatureAtNight > day2.AverageTemperatureAtNight)
+                {
+                    idx = count;
+                }
+                count++;
+            }
+            WeatherParametersDay day = ArrWeatherDays[idx];
+            return day.AverageTemperatureAtNight;
+        }
+
+        public void PrintMinTemperatureAtNights()
+        {
+            float mtan = MinTemperatureAtNights();
+            Console.WriteLine($"Минимальная температура ночью за месяц: {mtan}");
+        }
+
+        
+        public float MaxTemperatureAtDays()
+        {
+            int idx=0;
+            int count = 1;
+            while (count != ArrWeatherDays.Length)
+            {
+                WeatherParametersDay day1 = ArrWeatherDays[idx];
+                WeatherParametersDay day2 = ArrWeatherDays[count];
+
+                if (day1.AverageTemperatureAtNight < day2.AverageTemperatureAtNight)
+                {
+                    idx = count;
+                }
+                count++;
+            }
+            WeatherParametersDay day = ArrWeatherDays[idx];
+            return day.AverageTemperatureAtNight;
+        }
+
+        public void PrintMaxTemperatureAtDays()
+        {
+            float mtad = MaxTemperatureAtDays();
+            Console.WriteLine($"Максимальная температура днём за месяц: {mtad}");
+        }
+
+
+        
+
+
     }
 
     class Program
@@ -345,10 +473,13 @@ namespace Task_7
         {
             WeatherDays arrDays = WeatherDays.InputData();
             WeatherParametersDay[] arrParams = arrDays.ArrWeatherDays;
-            WeatherParametersDay secondDay = arrParams[0];
+            WeatherParametersDay firstDay = arrParams[0];
             Console.WriteLine();
-            secondDay.GetInfo();
-
+            firstDay.GetInfo();
+            arrDays.PrintNumberOfGloomyDays();
+            arrDays.PrintTotalDaysWithRainOrThunderstorm();
+            arrDays.PrintMinTemperatureAtNights();
+            arrDays.PrintMaxTemperatureAtDays();
 
             //WeatherParametersDay mondey = new WeatherParametersDay(12, 6, 133, 0);
             //WeatherParametersDay tuesday = new WeatherParametersDay(13, 7, 125, 3, TypeOfWeather.кратковременный_дождь);
