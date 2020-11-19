@@ -1,98 +1,144 @@
-﻿
-using System;
-using System.Runtime.CompilerServices;
+﻿using System;
 
 namespace Oppppop
 {
     class Program
     {
-        private static int ndimension()
+        class coordinates
         {
-            Console.WriteLine("Виберіть кількість стопчиків у масиві: ");
-            string string1 = Console.ReadLine();
-            int n;
-            n = Convert.ToInt32(string1);
+            private double[] x;
 
-            return n;
-        }
-
-        private static int mdimension()
-        {
-            Console.WriteLine("Виберіть кількість рядків у масиві: ");
-            string string1 = Console.ReadLine();
-            int m;
-            m = Convert.ToInt32(string1);
-
-            return m;
-        }
-
-        private static int[,] massive(int x, int y)
-        {
-            int[,] array = new int[x, y];  //{ ndimension(), mdimension() } ;
-            Random rand = new Random();
-            for (int i = 0; i < x; i++)
+            public double[] pointx
             {
-                for (int j = 0; j < y; j++)
+                get
                 {
-                    array[i, j] = rand.Next(1, 100);
+                    return x;
+                }
+
+                set
+                {
+                    x = value;
                 }
             }
 
-            Console.WriteLine("Ваш масив згенеровано випадковими числами:");
-            for (int i = 0; i < x; i++)
+            private double[] y;
+
+            public double[] pointy
             {
-                for (int j = 0; j < y; j++)
+                get
                 {
-                    Console.Write(array[i, j] + "   ");
-                    //Console.WriteLine("Randk" + array.Rank);
+                    return y;
                 }
-                Console.WriteLine();
+
+                set
+                {
+                    y = value;
+                }
+            }
+        }
+
+        private static int choice(int num)
+        {
+            Console.WriteLine("Як ви хочете заповнити дані місяця 'Листопад'? \n 1 - заповнювати самостійно (вручну); \n 2 - згенерувати усі дані рандомно; \n - отримати дані із файлу. \n Ваша цифра:");
+
+            if (num == 1)
+            {
+
+            }
+
+            else if (num == 2)
+            {
+
+            }
+
+            else if (num == 3)
+            {
+
+            }
+
+            else
+            {
+                Console.WriteLine("Перевірте правильність вводу даних. Повинні бути цифри лише 1, 2 чи 3!");
+            }
+
+            return num;
+        }
+
+        enum WeatherTypes { Sunny, Thunder, Not_Defined, Rain, Short_Rain, Snowy, Foggy, Cloudy }
+
+
+        public class WeatherParametersDay
+        {
+            double avtpDay;
+            double avtpNight;
+            double avPressure;
+            double Precipitaton;
+            string WeatherType;
+
+            public WeatherParametersDay(double avtpDay, double avtpNight, double avPressure, double Precipitaton, string WeatherType)
+            {
+                avtpDay = Convert.ToDouble(avtpDay);
+                avtpNight = Convert.ToDouble(avtpNight);
+                avPressure = Convert.ToDouble(avPressure);
+                Precipitaton = Convert.ToDouble(Precipitaton);
+                WeatherType = Convert.ToString(WeatherType);
+            }
+
+            public void Output()
+            {
+                Console.WriteLine($"Середня температура вдень: {avtpDay},\nCередня температура вночі: {avtpNight}, \nCередній тиск: {avPressure}, \nКількість опадів: {Precipitaton}, \nТип погоди: {WeatherType} ");
+            }
+
+        }
+
+        private static int Days()
+        {
+            int CountDays = 0;
+            Console.WriteLine("Виберіть потрібну кількість днів для заповнення у місяці 'Листопад': ");
+            while (true)
+            {
+                try
+                {
+                    string days = Console.ReadLine();
+                    int Days = Convert.ToInt32(days);
+                    CountDays += Days;
+                    break;
+
+                }
+
+                catch
+                {
+                    Console.WriteLine("Введіть цифру (кількість днів)!");
+                    continue;
+                }
+            }
+            return CountDays;
+        }
+
+        private static void Output(int a)
+        {
+            // WeatherParametersDay[] days = WeatherParametersDay[a];
+        }
+        private static string[,] array(int a)
+        {
+            string[,] array = new string[a, 5];
+            for (int i = 0; i < a; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    //array[i,j]=
+                }
             }
 
             return array;
         }
 
-        private static int key()
-        {
-            Console.WriteLine("Введіть значення, яке хочете відшукати у масиві: ");
-            string str = Console.ReadLine();
-            int key = Convert.ToInt32(str);
-
-            return key;
-        }
-
-        private static void Search(int[,] array, int find)
-        {
-            for (int i = 0; i < array.Length; i++)
-            {
-                for (int j = 0; j < array.Length; j++)
-                {
-                    if (array[i, j] == find)
-                    {
-                        Console.WriteLine("Елемент знайдено на позиції: " + i, j);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Такого елементу не знайдено у Вашому масиві(((");
-                    }
-                }
-
-            }
-
-        }
-
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            massive(ndimension(), mdimension());
-            int[,] arrayx = massive(ndimension(), mdimension());
+            Output(Days());
 
-            Console.WriteLine("Введіть значення, яке хочете відшукати у масиві: ");
-            string str = Console.ReadLine();
-            int key = Convert.ToInt32(str);
 
-            Search(arrayx, key);
         }
-
     }
 }

@@ -147,7 +147,7 @@ namespace Task_6
 
                 }
                 int sum = min + max;
-                Console.WriteLine($"Сумма максимального та минимального значения в {i + 1} столбце: {sum}");
+                Console.WriteLine($"Сумма максимального и минимального значения в {i + 1} столбце: {sum}");
 
             }
         }

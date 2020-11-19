@@ -358,7 +358,7 @@ namespace Task_7
             int nogd = NumberOfGloomyDays();
             Console.WriteLine($"Количество хмурых дней: {nogd}");
         }
-        
+
         public int NumberOfDaysWithRain()
         {
             int nodwr = 0;
@@ -412,7 +412,7 @@ namespace Task_7
 
         public float MinTemperatureAtNights()
         {
-            int idx=0;
+            int idx = 0;
             int count = 1;
             while (count != ArrWeatherDays.Length)
             {
@@ -435,10 +435,10 @@ namespace Task_7
             Console.WriteLine($"Минимальная температура ночью за месяц: {mtan}");
         }
 
-        
+
         public float MaxTemperatureAtDays()
         {
-            int idx=0;
+            int idx = 0;
             int count = 1;
             while (count != ArrWeatherDays.Length)
             {
@@ -461,8 +461,27 @@ namespace Task_7
             Console.WriteLine($"Максимальная температура днём за месяц: {mtad}");
         }
 
+        public override string ToString()
+        {
+            string AllText = ("\nДень Температура днём (\u00b0C) Температура ночью (\u00b0C) Атмосферное давление (мм рт. ст.) Осадки (мм) Тип погоды");
+            int idx = 0;
+            while (idx != ArrWeatherDays.Length)
+            {
+                WeatherParametersDay day = ArrWeatherDays[idx];
+                string NewDayParams = $"\n{idx + 1}\t{day.AverageTemperaturePerDay}\t\t\t{day.AverageTemperatureAtNight}\t\t\t\t{day.AverageAtmosphericPressure}\t\t\t{day.Precipitation}\t{day.TypeOfWeatherAtDay}";
+                AllText = AllText + NewDayParams;
+                idx++;
+            }
+            return (AllText + "\n");
+        }
 
-        
+        public void PrintTable()
+        {
+            string text = this.ToString();
+            Console.WriteLine(text);
+        }
+
+
 
 
     }
@@ -476,6 +495,11 @@ namespace Task_7
             WeatherParametersDay firstDay = arrParams[0];
             Console.WriteLine();
             firstDay.GetInfo();
+
+            //string text = arrDays.ToString();
+            //Console.WriteLine(text);
+
+            arrDays.PrintTable();
             arrDays.PrintNumberOfGloomyDays();
             arrDays.PrintTotalDaysWithRainOrThunderstorm();
             arrDays.PrintMinTemperatureAtNights();
