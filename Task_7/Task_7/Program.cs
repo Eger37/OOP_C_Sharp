@@ -496,9 +496,6 @@ namespace Task_7
             Console.WriteLine();
             firstDay.GetInfo();
 
-            //string text = arrDays.ToString();
-            //Console.WriteLine(text);
-
             arrDays.PrintTable();
             arrDays.PrintNumberOfGloomyDays();
             arrDays.PrintTotalDaysWithRainOrThunderstorm();
