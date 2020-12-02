@@ -314,11 +314,6 @@ namespace Task_7
                 count++;
             }
 
-
-
-
-
-            Console.WriteLine("\nФайл принят");
             return arrDaysParams;
         }
 
